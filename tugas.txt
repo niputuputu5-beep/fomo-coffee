@@ -1,0 +1,386 @@
+Buatkan sistem web Point of Sales (POS) enterprise modern untuk coffee shop bernama “FOMO COFFEE” dengan konsep operasional profesional, scalable, aman, dan memiliki pemisahan tugas (segregation of duties) yang jelas antara Owner, Admin, dan Kasir. Sistem harus memiliki UI/UX premium ala coffee shop modern, responsive untuk desktop dan tablet, serta siap digunakan untuk operasional bisnis nyata.
+Gunakan sistem multi-role authentication dengan role-based access control (RBAC) sehingga setiap pengguna hanya dapat mengakses fitur sesuai tanggung jawabnya. Semua aktivitas penting harus tersimpan dalam audit log untuk menjaga internal control perusahaan.
+
+ROLE SYSTEM & SEGREGATION OF DUTIES
+
+1. OWNER
+
+* Full access seluruh sistem
+* Melihat seluruh laporan finansial dan operasional
+* Approval transaksi tertentu
+* Melihat performa bisnis dan analitik
+* Mengelola user dan hak akses
+* Tidak fokus melakukan transaksi kasir langsung
+
+2. ADMIN
+
+* Mengelola operasional harian
+* Mengelola produk, supplier, inventory, promo, customer data
+* Monitoring stok dan pembelian
+* Mengelola transaksi tertentu
+* Tidak dapat mengakses pengaturan owner sensitif
+
+3. KASIR
+
+* Fokus pada transaksi penjualan
+* Membuka dan menutup shift
+* Mengelola transaksi customer
+* Tidak dapat mengubah master data penting
+
+AUTHENTICATION & SECURITY
+
+* Login menggunakan username/email
+* Password encrypted & hashed
+* Forgot password
+* Session timeout
+* Activity log
+* Audit trail
+* Login history
+* Permission per menu
+* Role based dashboard
+* OTP optional
+* Device/session monitoring
+* Auto logout saat idle
+
+MASTER DATA MANAGEMENT
+
+1. MANAJEMEN PRODUK
+
+* CRUD produk
+* Kategori produk
+* Sub kategori
+* Upload multiple foto produk
+* Barcode/SKU otomatis
+* Status aktif/nonaktif
+* Produk seasonal
+* Produk best seller
+* Produk favorit
+* Size variation:
+
+  * Small
+  * Medium
+  * Large
+* Level gula
+* Level ice
+* Extra topping
+* Add-ons
+* Bundle menu
+* Paket hemat
+* Harga dine in & takeaway berbeda
+* Harga member
+* Multi pricing
+* Estimasi cost produk
+* Resep produk
+* Auto stock deduction
+* Produk habis otomatis hidden
+* Riwayat perubahan harga
+
+2. MANAJEMEN INVENTORY
+
+* Bahan baku
+* Satuan barang
+* Multi warehouse sederhana
+* Stock opname
+* Stock adjustment
+* Transfer stok
+* Stok minimum alert
+* Expired tracking
+* Batch inventory
+* Riwayat stok masuk & keluar
+* Forecast penggunaan bahan
+* Purchase receiving
+* Waste management
+* Spoiled inventory tracking
+* Inventory valuation
+
+3. MANAJEMEN SUPPLIER
+
+* CRUD supplier
+* Informasi kontak supplier
+* NPWP supplier
+* Alamat lengkap
+* Email & nomor telepon
+* Riwayat pembelian supplier
+* Supplier rating
+* Supplier performance
+* Hutang supplier
+* Termin pembayaran
+* Purchase order management
+* Approval pembelian
+* Status pembayaran supplier
+* Riwayat harga beli
+* Upload dokumen supplier
+
+4. MANAJEMEN PELANGGAN / CUSTOMER
+
+* Member management
+* Customer profile
+* Nomor telepon
+* Email pelanggan
+* Tanggal lahir
+* Gender
+* Poin loyalitas
+* Membership level:
+
+  * Silver
+  * Gold
+  * Platinum
+* Riwayat transaksi pelanggan
+* Favorite menu customer
+* Voucher customer
+* Cashback
+* Reward points
+* Customer notes
+* Customer blacklist
+* Referral system
+* Customer analytics
+* Frequency visit tracking
+* Birthday promo automation
+* Customer feedback & rating
+* QR member card
+* Membership expiration
+* WhatsApp integration placeholder
+
+5. PROMO & DISCOUNT MANAGEMENT
+
+* Voucher
+* Promo bundling
+* Buy 1 Get 1
+* Happy hour promo
+* Diskon member
+* Voucher code
+* Auto promo rules
+* Cashback promo
+* Promo per kategori
+* Promo per metode pembayaran
+* Promo tanggal tertentu
+* Promo seasonal
+* Validasi promo otomatis
+* Approval promo tertentu
+
+SISTEM KASIR / POINT OF SALES
+Tampilan POS harus cepat, modern, touch-friendly, minimalis, dan mirip aplikasi POS coffee shop premium internasional.
+
+FITUR POS
+
+* Pencarian produk instan
+* Shortcut favorite menu
+* Kategori produk
+* Grid produk modern
+* Cart management
+* Qty adjustment
+* Notes per item
+* Split bill
+* Merge bill
+* Hold transaction
+* Recall transaction
+* Multi order tab
+* Dine in / takeaway
+* Delivery order
+* Nomor meja
+* Reservasi meja sederhana
+* Queue order number
+* Kitchen order ticket
+* Status pesanan:
+
+  * Pending
+  * Processing
+  * Ready
+  * Completed
+* Multi payment:
+
+  * Cash
+  * QRIS
+  * Debit
+  * Credit card
+  * E-wallet
+  * Transfer bank
+* Auto tax
+* Service charge
+* Auto rounding
+* Diskon transaksi
+* Diskon item
+* Refund transaction
+* Void transaction
+* Approval manager/owner untuk void tertentu
+* Reprint receipt
+* Cetak thermal printer
+* Open cash drawer
+* Shift kasir
+* Cash in
+* Cash out
+* Closing kasir
+* Selisih kas kasir
+* End of day closing
+* Offline mode placeholder
+* Real-time sync placeholder
+
+TRANSACTION MANAGEMENT
+
+* Riwayat transaksi lengkap
+* Filter transaksi
+* Search transaksi
+* Detail transaksi
+* Refund history
+* Void history
+* Approval history
+* Transaction notes
+* Payment tracking
+* Transaction timeline
+* Invoice generation
+* Receipt reprint
+* Daily closing report
+* Shift report
+* Sales recap
+* Export transaksi
+* Manual adjustment log
+
+FINANCIAL & REPORTING
+Dashboard Owner harus sangat lengkap dan profesional.
+
+LAPORAN PENJUALAN
+
+* Penjualan harian
+* Penjualan mingguan
+* Penjualan bulanan
+* Penjualan tahunan
+* Penjualan per produk
+* Penjualan per kategori
+* Penjualan per kasir
+* Penjualan per jam
+* Peak hour analytics
+* Profit estimation
+* Gross margin sederhana
+* Average transaction value
+* Customer retention report
+* Repeat order report
+
+LAPORAN INVENTORY
+
+* Stock report
+* Fast moving item
+* Slow moving item
+* Waste report
+* Expired inventory report
+* Purchase report
+* Supplier report
+
+LAPORAN CUSTOMER
+
+* Top customer
+* Customer frequency
+* Loyalty point usage
+* Membership report
+* Customer spending analytics
+
+LAPORAN KASIR
+
+* Shift report
+* Cash movement
+* Void activity
+* Refund activity
+* Kasir performance
+
+EXPORT & FILE
+
+* Export PDF
+* Export Excel
+* Print report
+* Download invoice
+* Upload attachment
+* Backup database
+
+USER MANAGEMENT
+
+* CRUD user
+* Role management
+* Permission matrix
+* Status aktif/nonaktif
+* Reset password
+* Login restriction
+* Branch access
+* Activity monitoring
+* Audit log lengkap
+
+NOTIFICATION SYSTEM
+
+* Toast notification
+* Stok hampir habis
+* Transaksi berhasil
+* Reminder pembayaran supplier
+* Promo aktif
+* Birthday customer reminder
+* Shift belum closing
+* Approval request notification
+
+UI/UX DESIGN
+Desain harus:
+
+* Premium modern coffee shop aesthetic
+* Elegant dan minimalis
+* Responsive
+* Smooth animation
+* Sidebar modern
+* Dashboard card modern
+* Chart analytics modern
+* Dark/light mode
+* Dominasi warna:
+
+  * coffee brown
+  * cream
+  * black
+  * white
+* Typography clean premium
+* Empty state modern
+* Search & filter modern
+* Pagination modern
+* Confirmation dialog modern
+* Skeleton loading
+* Professional admin panel feel
+
+HALAMAN YANG HARUS ADA
+
+* Login
+* Forgot password
+* Dashboard
+* POS Kasir
+* Kitchen Display
+* Produk
+* Kategori
+* Inventory
+* Supplier
+* Customer
+* Membership
+* Promo
+* Transaksi
+* Shift Kasir
+* Purchase Order
+* Receiving Barang
+* Laporan
+* User Management
+* Audit Log
+* Pengaturan Sistem
+* Profil User
+* Notification Center
+
+Tambahkan:
+
+* Logo placeholder “FOMO COFFEE”
+* Dummy data realistis coffee shop
+* Seed database
+* Modern chart analytics
+* Internal control workflow
+* Approval flow
+* Clean database schema
+* Professional code architecture
+* Enterprise-ready structure
+* API ready structure
+* Clean modular system
+* Soft delete system
+* Error handling professional
+* Form validation lengkap
+
+Pastikan sistem benar-benar terlihat seperti aplikasi POS coffee shop profesional skala bisnis nyata dengan alur operasional lengkap dari pembelian bahan, inventory, supplier, customer, transaksi kasir, laporan, hingga analitik bisnis dan segregation of duties yang kuat antara Owner, Admin, dan Kasir.
+
+
+

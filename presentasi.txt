@@ -1,0 +1,373 @@
+PRESENTASI WEB POS FOMO COFFEE
+
+Topik Presentasi:
+1. Latar Belakang dan Tujuan Sistem
+2. Gambaran Umum Web POS FOMO COFFEE
+3. Role dan Segregation of Duties
+4. Alur Operasional Coffee Shop
+5. Fitur Point of Sales Kasir
+6. Inventory, Stok Opname, dan HPP
+7. Produk, Add-ons, Promo, dan Membership
+8. Purchase Order, Receiving, dan Supplier
+9. Kitchen Display dan Status Pesanan
+10. Transaksi, Refund, Void, dan Approval
+11. Laporan, Dashboard, dan Analitik
+12. Audit Log, Keamanan, dan Monitoring
+13. Responsiveness dan Kesiapan Deploy
+14. Kesimpulan
+
+
+1. Latar Belakang dan Tujuan Sistem
+
+Web POS FOMO COFFEE dibuat sebagai sistem Point of Sales modern untuk operasional coffee shop. Tujuan utamanya adalah membantu proses penjualan, pengelolaan produk, inventory, supplier, customer, promo, shift kasir, laporan, dan audit operasional dalam satu sistem yang terintegrasi.
+
+Sistem ini tidak hanya berfokus pada transaksi kasir, tetapi juga pada kontrol bisnis yang lebih lengkap, seperti pemisahan hak akses, pencatatan audit, approval transaksi tertentu, penghitungan HPP, dan monitoring stok.
+
+
+2. Gambaran Umum Web POS FOMO COFFEE
+
+FOMO COFFEE POS adalah aplikasi web berbasis dashboard yang memiliki tampilan modern, responsif, dan cocok untuk penggunaan desktop maupun tablet. Sistem ini dirancang untuk kebutuhan coffee shop dengan alur kerja nyata, mulai dari kasir menerima pesanan, kitchen memproses order, stok bahan berkurang otomatis, hingga owner melihat laporan bisnis.
+
+Halaman utama yang tersedia meliputi:
+- Login
+- Dashboard
+- POS Kasir
+- Kitchen Display
+- Produk
+- Kategori
+- Inventory
+- Supplier
+- Customer
+- Membership
+- Promo
+- Purchase Order
+- Receiving Barang
+- Transaksi
+- Shift Kasir
+- Laporan
+- Audit Log
+- User Management
+- Pengaturan
+- Notification Center
+- Profil User
+
+
+3. Role dan Segregation of Duties
+
+Sistem menggunakan multi-role authentication dengan pembagian akses yang jelas:
+
+Owner:
+- Memiliki akses penuh ke seluruh sistem.
+- Mengelola user dan pengaturan sensitif.
+- Melihat audit log.
+- Menyetujui approval seperti void, refund, dan purchase order.
+- Melihat laporan bisnis dan analitik.
+
+Admin:
+- Mengelola operasional harian.
+- Mengatur produk, kategori, inventory, supplier, promo, customer, membership, purchase order, dan receiving.
+- Tidak memiliki akses ke pengaturan owner yang sensitif.
+
+Kasir:
+- Fokus pada POS, transaksi, kitchen display, dan shift kasir.
+- Bisa membuka dan menutup shift.
+- Tidak bisa mengubah master data penting seperti produk, supplier, dan inventory.
+
+Pembagian role ini membantu menjaga internal control dan mengurangi risiko penyalahgunaan akses.
+
+
+4. Alur Operasional Coffee Shop
+
+Alur sistem secara umum:
+1. User login sesuai role.
+2. Kasir membuka shift.
+3. Kasir memilih produk di POS.
+4. Kasir menambahkan add-ons, promo, tipe order, customer, dan pembayaran.
+5. Transaksi tersimpan ke database.
+6. Kitchen Display menerima order pending.
+7. Kitchen mengubah status pesanan menjadi processing, ready, atau completed.
+8. Stok produk dan bahan baku berkurang otomatis.
+9. HPP dan gross profit transaksi dihitung.
+10. Owner/Admin melihat laporan dan audit log.
+
+
+5. Fitur Point of Sales Kasir
+
+Halaman POS dibuat touch-friendly dan cepat digunakan. Fitur yang tersedia:
+- Pencarian produk.
+- Filter kategori produk.
+- Grid produk modern.
+- Cart management.
+- Tambah/kurangi quantity.
+- Dine in, takeaway, dan delivery.
+- Nomor meja.
+- Customer selection.
+- Multi payment: cash, QRIS, debit, credit card, e-wallet, dan transfer bank.
+- Promo code.
+- Service charge.
+- Rounding.
+- Input uang diterima dan kembalian.
+- Hold order dan recall order.
+- Add-ons per item, seperti extra espresso shot, extra ice, whipped cream, caramel sauce, dan chocolate sauce.
+- Print receipt melalui browser print.
+- Shortcut WhatsApp customer.
+- Simulasi open cash drawer.
+
+POS juga memvalidasi bahwa kasir harus memiliki shift aktif sebelum menyelesaikan transaksi.
+
+
+6. Inventory, Stok Opname, dan HPP
+
+Inventory digunakan untuk mengelola bahan baku dan stok operasional. Fitur inventory meliputi:
+- Daftar item inventory.
+- Search dan filter status.
+- Stok minimum.
+- Status normal, low stock, out of stock, dan expired.
+- Unit cost.
+- Total value.
+- Lokasi penyimpanan.
+- Soft delete item.
+- Stok opname.
+- Riwayat stok opname.
+
+Stok opname mencatat:
+- Stok sistem.
+- Stok aktual hasil hitung.
+- Selisih stok.
+- Nilai selisih.
+- Alasan atau catatan.
+- User pencatat.
+- Waktu pencatatan.
+
+Sistem juga sudah memiliki perhitungan HPP:
+- Produk dapat memiliki cost price sebagai HPP fallback.
+- Produk dapat memiliki resep/BOM ke inventory.
+- Transaksi menghitung COGS/HPP.
+- Gross profit dihitung dari total transaksi dikurangi HPP.
+- Add-ons juga dapat ikut menghitung HPP dan mengurangi inventory.
+
+
+7. Produk, Add-ons, Promo, dan Membership
+
+Manajemen produk mendukung:
+- CRUD produk.
+- SKU.
+- Kategori.
+- Harga dasar.
+- HPP fallback.
+- Harga member.
+- Harga dine in.
+- Harga takeaway.
+- Stok produk.
+- Stok minimum.
+- Status aktif/nonaktif.
+- Produk best seller.
+- Produk favorite.
+- Produk seasonal.
+- Filter produk.
+- Pagination tabel produk.
+
+Add-ons POS sudah memiliki manajemen sendiri:
+- Extra Espresso Shot.
+- Extra Ice.
+- Less Ice.
+- Whipped Cream.
+- Caramel Sauce.
+- Chocolate Sauce.
+
+Promo mendukung:
+- CRUD promo.
+- Kode promo.
+- Tipe promo.
+- Nilai diskon.
+- Minimum pembelian.
+- Maksimum diskon.
+- Target promo.
+- Tanggal mulai dan berakhir.
+- Usage limit.
+- Usage count.
+
+Membership mendukung program membership seperti Silver, Gold, dan Platinum dengan benefit, point multiplier, dan minimum spend.
+
+
+8. Purchase Order, Receiving, dan Supplier
+
+Supplier management memiliki:
+- CRUD supplier.
+- Contact person.
+- Telepon.
+- Email.
+- Alamat.
+- Payment terms.
+- Rating.
+- Debt/hutang supplier.
+- Search supplier.
+
+Purchase Order mendukung:
+- Pembuatan PO.
+- Supplier.
+- Estimasi nilai.
+- Tanggal estimasi.
+- Catatan.
+- Status pending approval.
+- Approve oleh Owner.
+- Cancel PO.
+- Edit PO.
+
+Receiving Barang mendukung:
+- Catat barang masuk.
+- Supplier.
+- Item.
+- Batch.
+- Jumlah diterima.
+- Satuan.
+- Update inventory.
+- Edit dan hapus receiving.
+
+
+9. Kitchen Display dan Status Pesanan
+
+Kitchen Display sudah tersambung ke transaksi real dari database. Pesanan yang masuk dari POS akan muncul sebagai antrean kitchen.
+
+Status pesanan:
+- Pending.
+- Processing.
+- Ready.
+- Completed.
+
+Dengan fitur ini, alur kasir dan kitchen menjadi lebih sinkron.
+
+
+10. Transaksi, Refund, Void, dan Approval
+
+Halaman transaksi memiliki:
+- Search transaksi.
+- Filter status.
+- Pagination.
+- Detail transaksi.
+- Daftar item transaksi.
+- Add-ons/extras.
+- HPP.
+- Gross profit.
+- Total transaksi.
+- Reprint receipt.
+- Request refund.
+- Request void.
+
+Refund dan void tidak langsung dijalankan sembarangan. Sistem membuat request approval yang harus diputuskan oleh Owner. Ini menjaga kontrol internal dan mencegah kasir melakukan void/refund tanpa otorisasi.
+
+Approval juga mencegah request duplikat jika request sebelumnya masih pending.
+
+
+11. Laporan, Dashboard, dan Analitik
+
+Dashboard menampilkan ringkasan:
+- Penjualan hari ini.
+- Total transaksi.
+- Pelanggan aktif.
+- Rata-rata transaksi.
+- Grafik penjualan harian.
+- Snapshot best seller.
+- Stok menipis.
+- Produk best seller.
+
+Halaman laporan menampilkan:
+- Total sales.
+- HPP/COGS.
+- Gross profit.
+- Gross margin.
+- Customer analytics.
+- Inventory value.
+- Sales trend.
+- Peak hour/hourly sales.
+- Payment distribution.
+- Top products.
+- Export CSV.
+
+Periode laporan mendukung:
+- Hari ini.
+- Minggu ini.
+- Bulan ini.
+- Tahun ini.
+
+
+12. Audit Log, Keamanan, dan Monitoring
+
+Sistem memiliki audit log untuk mencatat aktivitas penting, seperti:
+- Login.
+- Logout.
+- Create data.
+- Update data.
+- Soft delete data.
+- Open shift.
+- Close shift.
+- Create transaction.
+- Request approval.
+- Decide approval.
+- Stock opname.
+
+Keamanan yang tersedia:
+- Password di-hash.
+- Session cookie.
+- Role based access control.
+- User aktif/nonaktif.
+- Idle logout di frontend.
+- Device/session monitoring.
+- Audit trail.
+
+
+13. Responsiveness dan Kesiapan Deploy
+
+UI dibuat responsif untuk desktop dan tablet. Tabel besar sudah dilengkapi pagination agar tetap ringan dan rapi ketika data bertambah banyak.
+
+Pagination tersedia pada:
+- Transaksi.
+- Audit Log.
+- Riwayat Stok Opname.
+- Shift.
+- Produk.
+- Add-ons.
+- Membership.
+- Purchase Order.
+- Receiving.
+
+Validasi teknis yang sudah dilakukan:
+- TypeScript check berhasil.
+- Lint berhasil.
+- Build production berhasil.
+- Test command berhasil.
+- Bundle production berhasil di-import.
+- Script start dibuat portable lintas OS.
+
+Sistem siap dijalankan untuk demo dan sudah lebih siap untuk deployment, dengan catatan integrasi hardware seperti thermal printer dan cash drawer membutuhkan konfigurasi perangkat fisik.
+
+
+14. Kesimpulan
+
+FOMO COFFEE POS adalah sistem web POS coffee shop yang mencakup alur operasional dari kasir, kitchen, inventory, supplier, customer, promo, membership, transaksi, shift, laporan, hingga audit log.
+
+Keunggulan utama sistem:
+- Alur POS lengkap dan modern.
+- Role Owner, Admin, dan Kasir terpisah jelas.
+- Inventory dan HPP sudah terhubung ke transaksi.
+- Kitchen Display real-time berbasis database refresh.
+- Refund dan void menggunakan approval Owner.
+- Laporan bisnis sudah berbasis data transaksi.
+- Audit log membantu kontrol internal.
+- UI responsif dan siap untuk data besar melalui pagination.
+
+Penutup:
+Dengan sistem ini, FOMO COFFEE dapat menjalankan operasional coffee shop secara lebih tertata, transparan, dan profesional. Sistem tidak hanya membantu transaksi harian, tetapi juga mendukung pengambilan keputusan bisnis melalui laporan, monitoring stok, dan audit aktivitas.
+
+
+Contoh Alur Demo Saat Presentasi:
+1. Login sebagai Owner untuk menunjukkan dashboard, audit log, dan approval.
+2. Login sebagai Kasir untuk membuka shift.
+3. Masuk ke POS, pilih produk, tambah add-ons, pilih customer, masukkan promo, dan complete order.
+4. Buka Kitchen Display untuk melihat order masuk.
+5. Ubah status order menjadi processing, ready, dan completed.
+6. Buka halaman Transaksi untuk melihat detail transaksi, HPP, gross profit, dan reprint.
+7. Buka Inventory untuk melihat stok dan stok opname.
+8. Buka Reports untuk menunjukkan sales, HPP, gross profit, payment distribution, dan top products.
+9. Buka Audit Log untuk menunjukkan aktivitas yang tercatat.
+10. Tutup dengan menjelaskan bahwa sistem sudah divalidasi build dan siap demo/deploy.
