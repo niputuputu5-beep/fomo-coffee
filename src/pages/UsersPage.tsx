@@ -64,7 +64,8 @@ export default function UsersPage() {
       </div>
 
       <div className="card-glass overflow-hidden rounded-2xl">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[680px]">
           <thead>
             <tr className="border-b border-white/[0.07] text-xs uppercase tracking-wider text-white/50">
               <th className="px-4 py-3 text-left">User</th>
@@ -121,6 +122,7 @@ export default function UsersPage() {
             )})}
           </tbody>
         </table>
+        </div>
         <PaginationControls
           page={page}
           pageSize={PAGE_SIZE}
@@ -136,7 +138,8 @@ export default function UsersPage() {
           <h3 className="text-base font-semibold text-white">Permintaan Reset Password</h3>
           <p className="mt-1 text-xs text-white/45">Request dari halaman Forgot Password yang menunggu keputusan owner.</p>
         </div>
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[760px]">
           <thead>
             <tr className="border-b border-white/[0.07] text-xs uppercase tracking-wider text-white/50">
               <th className="px-4 py-3 text-left">Username</th>
@@ -182,6 +185,7 @@ export default function UsersPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       <QuickFormDialog

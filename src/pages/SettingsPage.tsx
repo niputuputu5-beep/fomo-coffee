@@ -279,7 +279,8 @@ export default function SettingsPage() {
           </Button>
         </div>
         <div className="mt-4 overflow-hidden rounded-xl border border-white/[0.07]">
-          <table className="w-full">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px]">
             <thead className="bg-white/[0.03] text-xs uppercase tracking-wider text-white/45">
               <tr>
                 <th className="px-3 py-2 text-left">User</th>
@@ -314,6 +315,7 @@ export default function SettingsPage() {
               ))}
             </tbody>
           </table>
+          </div>
           <PaginationControls
             page={devicePage}
             pageSize={DEVICE_PAGE_SIZE}

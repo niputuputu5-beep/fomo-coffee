@@ -59,7 +59,7 @@ export default function KitchenPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredOrders.length === 0 ? (
-          <div className="card-glass rounded-2xl p-8 text-center text-white/45">
+          <div className="card-glass rounded-2xl p-8 text-center text-white/45 md:col-span-2 xl:col-span-3">
             <ChefHat size={34} className="mx-auto mb-3 text-[#D4A853]" />
             <p className="text-sm">Belum ada order kitchen.</p>
           </div>

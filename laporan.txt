@@ -146,7 +146,7 @@ B. Tahap Pembuatan Aplikasi Menggunakan Kimi AI
 
 Tujuan penggunaan Kimi AI:
 - Mengubah rancangan dari Gemini menjadi kode aplikasi.
-- Membuat frontend React, backend Hono/tRPC, schema Drizzle, seed data, dan halaman admin.
+- Membuat frontend React, backend Hono/tRPC, schema Drizzle, seed data.
 - Membantu iterasi bug fix dan penyempurnaan UI.
 
 Prompt awal untuk Kimi AI:
@@ -392,3 +392,41 @@ E. Deploy
 3. SESSION_SECRET wajib diganti dengan string panjang acak.
 4. DATABASE_URL produksi jangan disimpan di repository.
 5. Jalankan npm run lint, npm run check, npm test, dan npm run build sebelum push.
+
+14. Audit Ulang Fitur, Layout, dan Sistem - 22 Mei 2026
+
+Temuan yang diperbaiki:
+
+1. Form produk masih bisa error jika field URL gambar tidak tersedia.
+   - Perbaikan: normalisasi URL gambar sekarang aman untuk nilai kosong/undefined.
+
+2. Dialog form cepat bisa terlalu tinggi di layar kecil.
+   - Perbaikan: QuickFormDialog diberi max-height 92vh dan overflow scroll.
+
+3. Beberapa tabel besar masih melebar keluar layout mobile.
+   - Perbaikan: tabel User Management, Reset Password Request, Transaksi, Audit Log, dan Device Session diberi wrapper overflow-x-auto serta min-width yang stabil.
+
+4. Tombol reprint pada list transaksi mencetak halaman terlalu cepat sebelum detail transaksi siap.
+   - Perbaikan: tombol tersebut sekarang membuka detail transaksi; proses reprint dilakukan dari dialog detail.
+
+5. Dialog detail transaksi bisa kepanjangan di viewport kecil.
+   - Perbaikan: dialog diberi max-height dan scroll internal.
+
+6. HTML struk POS memakai data transaksi langsung.
+   - Perbaikan: data dinamis pada HTML struk sekarang di-escape sebelum ditulis ke popup print.
+
+7. Tombol WhatsApp POS bisa membuka link tanpa nomor customer.
+   - Perbaikan: sistem sekarang mengecek nomor customer dan memberi toast error jika nomor belum tersedia.
+
+8. Empty state Kitchen Display hanya mengisi satu kolom pada layar besar.
+   - Perbaikan: empty state dibuat span penuh sesuai jumlah kolom grid.
+
+9. Laporan penjualan masih berisiko menghitung transaksi void, cancelled, refunded, atau payment void.
+   - Perbaikan: sales summary, sales trend, hourly sales, payment distribution, dan top products hanya menghitung transaksi reportable.
+
+Validasi setelah audit ulang:
+
+1. npm run check: berhasil.
+2. npm run lint: berhasil.
+3. npm test: berhasil. 1 test file passed, 4 tests passed.
+4. npm run build: berhasil.

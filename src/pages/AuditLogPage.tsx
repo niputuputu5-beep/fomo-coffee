@@ -35,7 +35,8 @@ export default function AuditLogPage() {
       </div>
 
       <div className="card-glass rounded-2xl overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[900px]">
           <thead>
             <tr className="border-b border-white/[0.07] text-xs uppercase tracking-wider text-white/50">
               <th className="text-left py-3 px-4">Waktu</th>
@@ -79,6 +80,7 @@ export default function AuditLogPage() {
             )}
           </tbody>
         </table>
+        </div>
         <PaginationControls
           page={page}
           pageSize={PAGE_SIZE}

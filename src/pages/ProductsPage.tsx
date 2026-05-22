@@ -107,7 +107,7 @@ export default function ProductsPage() {
     return result.url;
   };
 
-  const normalizeImageUrl = (value: string) => value.trim() || undefined;
+  const normalizeImageUrl = (value?: string) => value?.trim() || undefined;
 
   const handleSubmit = async (values: Record<string, string>, files: Record<string, File | null>) => {
     const flags = (values.flags || "").toLowerCase();

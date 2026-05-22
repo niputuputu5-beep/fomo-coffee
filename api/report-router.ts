@@ -8,14 +8,18 @@ function dateKey(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
+function isReportableSale(tx: typeof transactions.$inferSelect) {
+  return !["cancelled", "void"].includes(tx.status) && !["refunded", "void"].includes(tx.paymentStatus);
+}
+
 export const reportRouter = createRouter({
   salesSummary: adminQuery
     .input(z.object({ startDate: z.string(), endDate: z.string() }))
     .query(async ({ input }) => {
       const db = getDb();
-      const txs = await db.select().from(transactions).where(
+      const txs = (await db.select().from(transactions).where(
         and(gte(transactions.createdAt, new Date(input.startDate)), lte(transactions.createdAt, new Date(input.endDate)))
-      );
+      )).filter(isReportableSale);
       const totalSales = txs.reduce((s, t) => s + Number(t.totalAmount), 0);
       const totalCogs = txs.reduce((s, t) => s + Number(t.totalCogs), 0);
       const grossProfit = txs.reduce((s, t) => s + Number(t.grossProfit), 0);
@@ -34,9 +38,9 @@ export const reportRouter = createRouter({
   salesTrend: adminQuery
     .input(z.object({ startDate: z.string(), endDate: z.string() }))
     .query(async ({ input }) => {
-      const txs = await getDb().select().from(transactions).where(
+      const txs = (await getDb().select().from(transactions).where(
         and(gte(transactions.createdAt, new Date(input.startDate)), lte(transactions.createdAt, new Date(input.endDate))),
-      );
+      )).filter(isReportableSale);
       const grouped = new Map<string, { name: string; sales: number; orders: number; grossProfit: number }>();
       for (const tx of txs) {
         const key = dateKey(new Date(tx.createdAt));
@@ -52,9 +56,9 @@ export const reportRouter = createRouter({
   hourlySales: adminQuery
     .input(z.object({ startDate: z.string(), endDate: z.string() }))
     .query(async ({ input }) => {
-      const txs = await getDb().select().from(transactions).where(
+      const txs = (await getDb().select().from(transactions).where(
         and(gte(transactions.createdAt, new Date(input.startDate)), lte(transactions.createdAt, new Date(input.endDate))),
-      );
+      )).filter(isReportableSale);
       const grouped = new Map<string, { hour: string; orders: number; sales: number }>();
       for (const tx of txs) {
         const hour = `${new Date(tx.createdAt).getHours().toString().padStart(2, "0")}:00`;
@@ -69,9 +73,9 @@ export const reportRouter = createRouter({
   paymentDistribution: adminQuery
     .input(z.object({ startDate: z.string(), endDate: z.string() }))
     .query(async ({ input }) => {
-      const txs = await getDb().select().from(transactions).where(
+      const txs = (await getDb().select().from(transactions).where(
         and(gte(transactions.createdAt, new Date(input.startDate)), lte(transactions.createdAt, new Date(input.endDate))),
-      );
+      )).filter(isReportableSale);
       const total = txs.reduce((sum, tx) => sum + Number(tx.totalAmount), 0);
       const grouped = txs.reduce((acc: Record<string, number>, tx) => {
         acc[tx.paymentMethod] = (acc[tx.paymentMethod] || 0) + Number(tx.totalAmount);
@@ -88,9 +92,14 @@ export const reportRouter = createRouter({
     .input(z.object({ startDate: z.string(), endDate: z.string(), limit: z.number().default(10) }))
     .query(async ({ input }) => {
       const db = getDb();
-      const items = await db.select().from(transactionItems).where(
+      const txs = (await db.select().from(transactions).where(
+        and(gte(transactions.createdAt, new Date(input.startDate)), lte(transactions.createdAt, new Date(input.endDate))),
+      )).filter(isReportableSale);
+      const reportableTransactionIds = new Set(txs.map((tx) => tx.id));
+      if (reportableTransactionIds.size === 0) return [];
+      const items = (await db.select().from(transactionItems).where(
         and(gte(transactionItems.createdAt, new Date(input.startDate)), lte(transactionItems.createdAt, new Date(input.endDate))),
-      );
+      )).filter((item) => reportableTransactionIds.has(item.transactionId));
       const productMap = new Map<number, { name: string; quantity: number; revenue: number; cogs: number; grossProfit: number; margin: number }>();
       for (const item of items) {
         const existing = productMap.get(item.productId);

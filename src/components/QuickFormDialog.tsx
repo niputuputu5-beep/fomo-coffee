@@ -50,7 +50,7 @@ export function QuickFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border-white/[0.08] bg-[#1E1E20] text-white sm:max-w-xl">
+      <DialogContent className="max-h-[92vh] overflow-y-auto border-white/[0.08] bg-[#1E1E20] text-white sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

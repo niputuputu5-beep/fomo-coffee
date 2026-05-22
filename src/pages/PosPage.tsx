@@ -371,11 +371,19 @@ export default function PosPage() {
     return lines.filter(Boolean).join("\n");
   };
 
+  const escapeHtml = (value: string | number | undefined | null) =>
+    String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
   const printReceipt = (receipt: ReceiptData) => {
     const receiptHtml = `
       <html>
         <head>
-          <title>Struk ${receipt.orderNumber}</title>
+          <title>Struk ${escapeHtml(receipt.orderNumber)}</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 0; color: #111; }
             .receipt { width: 280px; padding: 16px; }
@@ -392,29 +400,29 @@ export default function PosPage() {
         <body>
           <div class="receipt">
             <h1>FOMO COFFEE</h1>
-            <p class="center muted">${receipt.orderNumber}<br/>${receipt.createdAt.toLocaleString("id-ID")}</p>
+            <p class="center muted">${escapeHtml(receipt.orderNumber)}<br/>${escapeHtml(receipt.createdAt.toLocaleString("id-ID"))}</p>
             <div class="line"></div>
-            <div class="row"><span>Customer</span><strong>${receipt.customerName || "Walk-in"}</strong></div>
-            <div class="row"><span>Kasir</span><strong>${receipt.cashierName || "-"}</strong></div>
-            <div class="row"><span>Tipe</span><strong>${orderTypeLabels[receipt.orderType]}${receipt.tableNumber ? ` / ${receipt.tableNumber}` : ""}</strong></div>
+            <div class="row"><span>Customer</span><strong>${escapeHtml(receipt.customerName || "Walk-in")}</strong></div>
+            <div class="row"><span>Kasir</span><strong>${escapeHtml(receipt.cashierName || "-")}</strong></div>
+            <div class="row"><span>Tipe</span><strong>${escapeHtml(orderTypeLabels[receipt.orderType])}${receipt.tableNumber ? ` / ${escapeHtml(receipt.tableNumber)}` : ""}</strong></div>
             <div class="line"></div>
             ${receipt.items.map((item) => `
               <div class="item">
-                <div class="row"><strong>${item.quantity}x ${item.productName}</strong><strong>${formatPrice(item.subtotal)}</strong></div>
-                <div class="addon">${item.sugarLevel} | ${item.iceLevel}</div>
-                ${item.addons.map((addon) => `<div class="addon">+ ${addon.name}${addon.quantity > 1 ? ` x${addon.quantity}` : ""} (${formatPrice(addon.price * addon.quantity * item.quantity)})</div>`).join("")}
+                <div class="row"><strong>${escapeHtml(item.quantity)}x ${escapeHtml(item.productName)}</strong><strong>${escapeHtml(formatPrice(item.subtotal))}</strong></div>
+                <div class="addon">${escapeHtml(item.sugarLevel)} | ${escapeHtml(item.iceLevel)}</div>
+                ${item.addons.map((addon) => `<div class="addon">+ ${escapeHtml(addon.name)}${addon.quantity > 1 ? ` x${escapeHtml(addon.quantity)}` : ""} (${escapeHtml(formatPrice(addon.price * addon.quantity * item.quantity))})</div>`).join("")}
               </div>
             `).join("")}
             <div class="line"></div>
-            <div class="row"><span>Subtotal</span><span>${formatPrice(receipt.subtotal)}</span></div>
-            <div class="row"><span>PPN</span><span>${formatPrice(receipt.taxAmount)}</span></div>
-            ${receipt.serviceCharge > 0 ? `<div class="row"><span>Service</span><span>${formatPrice(receipt.serviceCharge)}</span></div>` : ""}
-            ${receipt.discount > 0 ? `<div class="row"><span>Diskon</span><span>-${formatPrice(receipt.discount)}</span></div>` : ""}
-            ${receipt.roundingAmount !== 0 ? `<div class="row"><span>Rounding</span><span>${formatPrice(receipt.roundingAmount)}</span></div>` : ""}
-            <div class="row total"><span>Total</span><span>${formatPrice(receipt.total)}</span></div>
-            <div class="row"><span>Bayar</span><span>${paymentLabels[receipt.paymentMethod]}</span></div>
-            ${receipt.paymentMethod === "cash" ? `<div class="row"><span>Uang diterima</span><span>${formatPrice(receipt.cashReceived)}</span></div>` : ""}
-            ${receipt.paymentMethod === "cash" ? `<div class="row"><span>Kembali</span><span>${formatPrice(Math.max(receipt.changeAmount, 0))}</span></div>` : ""}
+            <div class="row"><span>Subtotal</span><span>${escapeHtml(formatPrice(receipt.subtotal))}</span></div>
+            <div class="row"><span>PPN</span><span>${escapeHtml(formatPrice(receipt.taxAmount))}</span></div>
+            ${receipt.serviceCharge > 0 ? `<div class="row"><span>Service</span><span>${escapeHtml(formatPrice(receipt.serviceCharge))}</span></div>` : ""}
+            ${receipt.discount > 0 ? `<div class="row"><span>Diskon</span><span>-${escapeHtml(formatPrice(receipt.discount))}</span></div>` : ""}
+            ${receipt.roundingAmount !== 0 ? `<div class="row"><span>Rounding</span><span>${escapeHtml(formatPrice(receipt.roundingAmount))}</span></div>` : ""}
+            <div class="row total"><span>Total</span><span>${escapeHtml(formatPrice(receipt.total))}</span></div>
+            <div class="row"><span>Bayar</span><span>${escapeHtml(paymentLabels[receipt.paymentMethod])}</span></div>
+            ${receipt.paymentMethod === "cash" ? `<div class="row"><span>Uang diterima</span><span>${escapeHtml(formatPrice(receipt.cashReceived))}</span></div>` : ""}
+            ${receipt.paymentMethod === "cash" ? `<div class="row"><span>Kembali</span><span>${escapeHtml(formatPrice(Math.max(receipt.changeAmount, 0)))}</span></div>` : ""}
             <div class="line"></div>
             <p class="center muted">Terima kasih sudah berkunjung ke FOMO COFFEE.</p>
           </div>
@@ -434,6 +442,10 @@ export default function PosPage() {
 
   const sendReceiptToWhatsApp = (receipt: ReceiptData) => {
     const phone = receipt.customerPhone?.replace(/\D/g, "").replace(/^0/, "62") || "";
+    if (!phone) {
+      toast.error("Nomor WhatsApp customer belum tersedia.");
+      return;
+    }
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(buildReceiptText(receipt))}`;
     window.open(url, "_blank");
   };
@@ -601,7 +613,13 @@ export default function PosPage() {
       toast.error("Pilih customer terlebih dahulu.");
       return;
     }
-    window.open(`https://wa.me/?text=${encodeURIComponent(`Halo ${selectedCustomer.name}, pesanan FOMO COFFEE Anda sedang diproses.`)}`, "_blank");
+    const selectedCustomerRecord = customers?.find((customer) => customer.id === selectedCustomer.id);
+    const phone = selectedCustomerRecord?.phone?.replace(/\D/g, "").replace(/^0/, "62") || "";
+    if (!phone) {
+      toast.error("Nomor WhatsApp customer belum tersedia.");
+      return;
+    }
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`Halo ${selectedCustomer.name}, pesanan FOMO COFFEE Anda sedang diproses.`)}`, "_blank");
   };
 
   useEffect(() => {

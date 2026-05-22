@@ -98,7 +98,8 @@ export default function TransactionsPage() {
       </div>
 
       <div className="card-glass rounded-2xl overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[980px]">
           <thead>
             <tr className="border-b border-white/[0.07] text-xs uppercase tracking-wider text-white/50">
               <th className="text-left py-3 px-4">No. Order</th>
@@ -146,7 +147,7 @@ export default function TransactionsPage() {
                       <button onClick={() => setSelectedId(tx.id)} className="rounded-lg bg-white/[0.06] p-2 text-white/55 hover:text-white" title="Detail">
                         <Eye size={14} />
                       </button>
-                      <button onClick={() => { setSelectedId(tx.id); setTimeout(() => window.print(), 150); }} className="rounded-lg bg-white/[0.06] p-2 text-white/55 hover:text-white" title="Reprint">
+                      <button onClick={() => setSelectedId(tx.id)} className="rounded-lg bg-white/[0.06] p-2 text-white/55 hover:text-white" title="Buka detail untuk reprint">
                         <Printer size={14} />
                       </button>
                     </div>
@@ -156,6 +157,7 @@ export default function TransactionsPage() {
             )}
           </tbody>
         </table>
+        </div>
         <PaginationControls
           page={page}
           pageSize={PAGE_SIZE}
@@ -166,7 +168,7 @@ export default function TransactionsPage() {
         />
       </div>
       <Dialog open={selectedId !== null} onOpenChange={(open) => !open && setSelectedId(null)}>
-        <DialogContent className="max-w-2xl border-white/[0.08] bg-[#1E1E20] text-white">
+        <DialogContent className="max-h-[92vh] overflow-y-auto border-white/[0.08] bg-[#1E1E20] text-white sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>Detail Transaksi {detail?.orderNumber}</DialogTitle>
           </DialogHeader>
