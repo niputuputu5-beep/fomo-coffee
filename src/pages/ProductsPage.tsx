@@ -18,6 +18,7 @@ type EditableProduct = {
   name: string;
   sku: string;
   categoryId: number;
+  image?: string | null;
   basePrice: string;
   costPrice: string;
   memberPrice?: string | null;
@@ -84,14 +85,41 @@ export default function ProductsPage() {
     { name: "memberPrice", label: "Harga Member", type: "number" as const },
     { name: "dineInPrice", label: "Harga Dine In", type: "number" as const },
     { name: "takeawayPrice", label: "Harga Takeaway", type: "number" as const },
+    { name: "imageUrl", label: "URL Gambar", placeholder: "https://... atau /products/latte.jpg" },
+    { name: "imageFile", label: "Upload Gambar dari Komputer", type: "file" as const, accept: "image/png,image/jpeg,image/webp,image/gif" },
     { name: "stockQuantity", label: "Stok", type: "number" as const },
     { name: "minStock", label: "Stok Minimum", type: "number" as const },
     { name: "flags", label: "Flag (best,favorite,seasonal)" },
     { name: "description", label: "Deskripsi", type: "textarea" as const },
   ];
 
-  const handleSubmit = (values: Record<string, string>) => {
-    const flags = values.flags.toLowerCase();
+  const uploadProductImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    const response = await fetch("/api/uploads/product-image", {
+      method: "POST",
+      body: formData,
+    });
+    const result = (await response.json().catch(() => ({}))) as { url?: string; error?: string };
+    if (!response.ok || !result.url) {
+      throw new Error(result.error || "Upload gambar gagal.");
+    }
+    return result.url;
+  };
+
+  const normalizeImageUrl = (value: string) => value.trim() || undefined;
+
+  const handleSubmit = async (values: Record<string, string>, files: Record<string, File | null>) => {
+    const flags = (values.flags || "").toLowerCase();
+    let image: string | undefined;
+    try {
+      image = files.imageFile
+        ? await uploadProductImage(files.imageFile)
+        : normalizeImageUrl(values.imageUrl);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Upload gambar gagal.");
+      return;
+    }
     if (formMode === "edit" && editingProduct) {
       updateProduct.mutate({
         id: editingProduct.id,
@@ -105,6 +133,7 @@ export default function ProductsPage() {
         takeawayPrice: values.takeawayPrice || undefined,
         stockQuantity: Number(values.stockQuantity || 0),
         minStock: Number(values.minStock || 5),
+        image: image ?? editingProduct.image ?? undefined,
         isBestSeller: flags.includes("best"),
         isFavorite: flags.includes("favorite"),
         isSeasonal: flags.includes("seasonal"),
@@ -127,7 +156,7 @@ export default function ProductsPage() {
       isBestSeller: flags.includes("best"),
       isFavorite: flags.includes("favorite"),
       isSeasonal: flags.includes("seasonal"),
-      image: "/products/cappuccino.jpg",
+      image: image || "/products/cappuccino.jpg",
       description: values.description,
     });
   };
@@ -315,6 +344,7 @@ export default function ProductsPage() {
           name: editingProduct.name,
           sku: editingProduct.sku,
           categoryId: String(editingProduct.categoryId),
+          imageUrl: editingProduct.image ?? "",
           basePrice: editingProduct.basePrice,
           costPrice: editingProduct.costPrice,
           memberPrice: editingProduct.memberPrice ?? "",

@@ -13,9 +13,10 @@ import { Textarea } from "@/components/ui/textarea";
 export type QuickFormField = {
   name: string;
   label: string;
-  type?: "text" | "number" | "email" | "password" | "textarea";
+  type?: "text" | "number" | "email" | "password" | "textarea" | "file";
   placeholder?: string;
   required?: boolean;
+  accept?: string;
 };
 
 type QuickFormDialogProps = {
@@ -25,7 +26,7 @@ type QuickFormDialogProps = {
   initialValues?: Record<string, string>;
   submitLabel?: string;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (values: Record<string, string>) => void;
+  onSubmit: (values: Record<string, string>, files: Record<string, File | null>) => void;
 };
 
 export function QuickFormDialog({
@@ -38,10 +39,12 @@ export function QuickFormDialog({
   onSubmit,
 }: QuickFormDialogProps) {
   const [values, setValues] = useState<Record<string, string>>({});
+  const [files, setFiles] = useState<Record<string, File | null>>({});
 
   useEffect(() => {
     if (open) {
       setValues(initialValues ?? {});
+      setFiles({});
     }
   }, [initialValues, open]);
 
@@ -55,12 +58,38 @@ export function QuickFormDialog({
           className="space-y-4"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmit(values);
+            onSubmit(values, files);
           }}
         >
           <div className="grid gap-4 sm:grid-cols-2">
             {fields.map((field) => {
               const Control = field.type === "textarea" ? Textarea : Input;
+              if (field.type === "file") {
+                return (
+                  <label key={field.name} className="sm:col-span-2">
+                    <span className="mb-1 block text-xs text-white/50">
+                      {field.label}
+                    </span>
+                    <Input
+                      required={field.required}
+                      type="file"
+                      accept={field.accept}
+                      onChange={(event) =>
+                        setFiles((current) => ({
+                          ...current,
+                          [field.name]: event.target.files?.[0] ?? null,
+                        }))
+                      }
+                      className="border-white/[0.08] bg-white/[0.04] text-white file:mr-3 file:rounded-md file:border-0 file:bg-white/[0.08] file:px-3 file:py-1.5 file:text-sm file:text-white hover:file:bg-white/[0.12]"
+                    />
+                    {files[field.name]?.name ? (
+                      <span className="mt-1 block truncate text-xs text-white/40">
+                        {files[field.name]?.name}
+                      </span>
+                    ) : null}
+                  </label>
+                );
+              }
               return (
                 <label
                   key={field.name}
