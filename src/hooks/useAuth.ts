@@ -27,8 +27,9 @@ export function useAuth(options?: UseAuthOptions) {
   });
 
   const logoutMutation = trpc.auth.logout.useMutation({
-    onSuccess: async () => {
-      await utils.invalidate();
+    onSuccess: () => {
+      utils.auth.me.setData(undefined, undefined);
+      void utils.auth.me.invalidate();
       navigate(redirectPath);
     },
   });
@@ -69,6 +70,7 @@ export function useAuth(options?: UseAuthOptions) {
       user: user ?? null,
       isAuthenticated: !!user,
       isLoading: isLoading || logoutMutation.isPending,
+      isLoggingOut: logoutMutation.isPending,
       error,
       logout,
       refresh: refetch,

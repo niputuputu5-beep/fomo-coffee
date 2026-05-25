@@ -34,6 +34,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { trpc } from "@/providers/trpc";
 
 const menuItems = [
@@ -62,8 +72,9 @@ const menuItems = [
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const location = useLocation();
-  const { user, logout } = useAuth();
+  const { user, logout, isLoggingOut } = useAuth();
   const heartbeat = trpc.device.heartbeat.useMutation();
   const heartbeatUserId = useRef<number | null>(null);
   const userRole = user?.role || "cashier";
@@ -159,8 +170,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
               )}
               <button
-                onClick={logout}
-                className="text-white/45 hover:text-red-400 transition-colors flex-shrink-0"
+                onClick={() => setLogoutConfirmOpen(true)}
+                disabled={isLoggingOut}
+                className="text-white/45 hover:text-red-400 transition-colors flex-shrink-0 disabled:cursor-not-allowed disabled:opacity-50"
                 title="Logout"
               >
                 <LogOut size={16} />
@@ -216,6 +228,28 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {children}
           </div>
         </main>
+        <AlertDialog open={logoutConfirmOpen} onOpenChange={setLogoutConfirmOpen}>
+          <AlertDialogContent className="border-white/[0.08] bg-[#1E1E20] text-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Logout?</AlertDialogTitle>
+              <AlertDialogDescription className="text-white/55">
+                Apakah Anda yakin ingin logout dari FOMO Coffee?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="border-white/[0.08] text-white/70 hover:bg-white/[0.06]">
+                Batal
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={logout}
+                disabled={isLoggingOut}
+                className="btn-primary-gold"
+              >
+                {isLoggingOut ? "Logout..." : "Ya, Logout"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </TooltipProvider>
     </div>
   );

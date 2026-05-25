@@ -155,6 +155,7 @@ export default function InventoryPage() {
       updateItem.mutate({
         id: editing.id,
         itemName: values.itemName,
+        sku: values.sku || editing.sku,
         quantity: Number(values.quantity || 0),
         minStock: Number(values.minStock || 5),
         location: values.location || "Main Warehouse",

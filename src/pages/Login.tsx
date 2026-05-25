@@ -9,8 +9,8 @@ import { Link, useNavigate } from "react-router";
 export default function Login() {
   const navigate = useNavigate();
   const utils = trpc.useUtils();
-  const [username, setUsername] = useState("owner");
-  const [password, setPassword] = useState("owner123");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: async () => {
@@ -28,6 +28,7 @@ export default function Login() {
         <CardContent>
           <form
             className="space-y-4"
+            autoComplete="off"
             onSubmit={(event) => {
               event.preventDefault();
               loginMutation.mutate({ username, password });
@@ -37,7 +38,7 @@ export default function Login() {
               <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
-                autoComplete="username"
+                autoComplete="off"
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
               />
@@ -47,7 +48,7 @@ export default function Login() {
               <Input
                 id="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
               />

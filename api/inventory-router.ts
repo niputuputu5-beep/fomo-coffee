@@ -61,6 +61,7 @@ export const inventoryRouter = createRouter({
     .input(z.object({
       id: z.number(),
       itemName: z.string().optional(),
+      sku: z.string().trim().min(1).optional(),
       quantity: z.number().optional(),
       minStock: z.number().optional(),
       unitCost: z.string().optional(),
